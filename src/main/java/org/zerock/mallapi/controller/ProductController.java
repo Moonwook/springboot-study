@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -48,6 +49,14 @@ public class ProductController {
     //서비스 호출 
     Long pno = productService.register(productDTO);
 
+    try {
+      Thread.sleep(2000);
+    } catch (InterruptedException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
+
+
     return Map.of("result", pno);
   }
 
@@ -75,10 +84,18 @@ public class ProductController {
 
   }
 
+  @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')") //임시로 권한 설정 
   @GetMapping("/list")
   public PageResponseDTO<ProductDTO> list(PageRequestDTO pageRequestDTO) {
 
     log.info("list............." + pageRequestDTO);
+
+    try {
+      Thread.sleep(2000);
+    } catch (InterruptedException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
 
     return productService.getList(pageRequestDTO);
     
@@ -86,6 +103,13 @@ public class ProductController {
 
   @GetMapping("/{pno}")
   public ProductDTO read(@PathVariable(name="pno") Long pno) {
+
+    try {
+      Thread.sleep(2000);
+    } catch (InterruptedException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
 
     return productService.get(pno);
   }
