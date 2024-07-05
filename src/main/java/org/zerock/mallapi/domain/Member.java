@@ -8,8 +8,8 @@ import java.util.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter 
-@ToString (exclude = "memberRoleList")
+@Getter
+@ToString(exclude = "memberRoleList")
 public class Member {
 
   @Id
@@ -25,23 +25,23 @@ public class Member {
   @Builder.Default
   private List<MemberRole> memberRoleList = new ArrayList<>();
 
-  public void addRole(MemberRole memberRole){
+  public void addRole(MemberRole memberRole) {
     memberRoleList.add(memberRole);
   }
 
-  public void clearRole(){
+  public void clearRole() {
     memberRoleList.clear();
   }
 
-  public void changeNickname(String nickname){
+  public void changeNickname(String nickname) {
     this.nickname = nickname;
   }
 
-  public void changePw(String pw){
+  public void changePw(String pw) {
     this.pw = pw;
   }
 
-  public void chageSocial(boolean social){
+  public void changeSocial(boolean social) {
     this.social = social;
   }
 

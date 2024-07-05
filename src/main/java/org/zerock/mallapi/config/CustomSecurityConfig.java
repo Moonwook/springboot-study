@@ -29,43 +29,39 @@ import lombok.extern.log4j.Log4j2;
 public class CustomSecurityConfig {
 
   @Bean
-  public PasswordEncoder passwordEncoder(){
+  public PasswordEncoder passwordEncoder() {
     return new BCryptPasswordEncoder();
   }
 
-
   @Bean
-  public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {    
-    log.info("---------------------security config--------------------------");
+  public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+
+    log.info("---------------------security config---------------------------");
 
     http.cors(httpSecurityCorsConfigurer -> {
       httpSecurityCorsConfigurer.configurationSource(corsConfigurationSource());
     });
 
-    http.sessionManagement(sessionConfig ->  sessionConfig.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+    http.sessionManagement(sessionConfig -> sessionConfig.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
     http.csrf(config -> config.disable());
-    
+
     http.formLogin(config -> {
       config.loginPage("/api/member/login");
       config.successHandler(new APILoginSuccessHandler());
       config.failureHandler(new APILoginFailHandler());
     });
-    
-    http.addFilterBefore(new JWTCheckFilter(), UsernamePasswordAuthenticationFilter.class); //JWT체크 
+
+    http.addFilterBefore(new JWTCheckFilter(), UsernamePasswordAuthenticationFilter.class); // JWT체크
 
     http.exceptionHandling(config -> {
       config.accessDeniedHandler(new CustomAccessDeniedHandler());
     });
 
-
     return http.build();
   }
 
-
-
-
-    @Bean
+  @Bean
   public CorsConfigurationSource corsConfigurationSource() {
 
     CorsConfiguration configuration = new CorsConfiguration();
@@ -80,5 +76,5 @@ public class CustomSecurityConfig {
 
     return source;
   }
-  
+
 }
