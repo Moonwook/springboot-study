@@ -16,7 +16,7 @@ import lombok.ToString;
 public class MemberDTO extends User {
 
   private String email;
-    
+
   private String pw;
 
   private String nickname;
@@ -26,11 +26,9 @@ public class MemberDTO extends User {
   private List<String> roleNames = new ArrayList<>();
 
   public MemberDTO(String email, String pw, String nickname, boolean social, List<String> roleNames) {
-    super(
-      email,
-      pw, 
-      roleNames.stream().map(str -> new SimpleGrantedAuthority("ROLE_"+str)).collect(Collectors.toList()));
-    
+    super(email, pw,
+        roleNames.stream().map(str -> new SimpleGrantedAuthority("ROLE_" + str)).collect(Collectors.toList()));
+
     this.email = email;
     this.pw = pw;
     this.nickname = nickname;
@@ -43,7 +41,7 @@ public class MemberDTO extends User {
     Map<String, Object> dataMap = new HashMap<>();
 
     dataMap.put("email", email);
-    dataMap.put("pw",pw);
+    dataMap.put("pw", pw);
     dataMap.put("nickname", nickname);
     dataMap.put("social", social);
     dataMap.put("roleNames", roleNames);

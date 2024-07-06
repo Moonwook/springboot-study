@@ -2,6 +2,7 @@ package org.zerock.mallapi.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
+
 import java.util.*;
 
 @Entity
@@ -26,6 +27,7 @@ public class Member {
   private List<MemberRole> memberRoleList = new ArrayList<>();
 
   public void addRole(MemberRole memberRole) {
+
     memberRoleList.add(memberRole);
   }
 

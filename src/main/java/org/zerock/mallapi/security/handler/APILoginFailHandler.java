@@ -15,7 +15,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
-public class APILoginFailHandler implements AuthenticationFailureHandler{
+public class APILoginFailHandler implements AuthenticationFailureHandler {
 
   @Override
   public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
@@ -24,13 +24,13 @@ public class APILoginFailHandler implements AuthenticationFailureHandler{
     log.info("Login fail....." + exception);
 
     Gson gson = new Gson();
-    
+
     String jsonStr = gson.toJson(Map.of("error", "ERROR_LOGIN"));
 
     response.setContentType("application/json");
     PrintWriter printWriter = response.getWriter();
     printWriter.println(jsonStr);
-    printWriter.close();    
+    printWriter.close();
 
   }
 

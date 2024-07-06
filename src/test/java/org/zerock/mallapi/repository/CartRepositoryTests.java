@@ -1,16 +1,12 @@
 package org.zerock.mallapi.repository;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Commit;
-import org.zerock.mallapi.domain.Cart;
-import org.zerock.mallapi.domain.CartItem;
-import org.zerock.mallapi.domain.Member;
-import org.zerock.mallapi.domain.Product;
+import org.zerock.mallapi.domain.*;
 import org.zerock.mallapi.dto.CartItemListDTO;
 
 import jakarta.transaction.Transactional;
@@ -31,18 +27,19 @@ public class CartRepositoryTests {
   @Test
   public void testInsertByProduct() {
 
-    log.info("test1-------------------------");
+    log.info("test1-----------------------");
 
     // 사용자가 전송하는 정보
     String email = "user1@aaa.com";
     Long pno = 5L;
-    int qty = 1;
+    int qty = 2;
 
     // 만일 기존에 사용자의 장바구니 아이템이 있었다면
+
     CartItem cartItem = cartItemRepository.getItemOfPno(email, pno);
 
     if (cartItem != null) {
-      cartItem.changQty(qty);
+      cartItem.changeQty(qty);
       cartItemRepository.save(cartItem);
 
       return;
@@ -65,25 +62,28 @@ public class CartRepositoryTests {
       Cart tempCart = Cart.builder().owner(member).build();
 
       cart = cartRepository.save(tempCart);
+
     } else {
+
       cart = result.get();
     }
 
     log.info(cart);
-    // ----------------------------------------------------------------------------
+
+    // -------------------------------------------------------------
 
     if (cartItem == null) {
       Product product = Product.builder().pno(pno).build();
       cartItem = CartItem.builder().product(product).cart(cart).qty(qty).build();
-    }
 
+    }
     // 상품 아이템 저장
     cartItemRepository.save(cartItem);
   }
 
   @Test
   @Commit
-  public void testUpdateByCino() {
+  public void tesstUpdateByCino() {
 
     Long cino = 1L;
 
@@ -93,9 +93,10 @@ public class CartRepositoryTests {
 
     CartItem cartItem = result.orElseThrow();
 
-    cartItem.changQty(qty);
+    cartItem.changeQty(qty);
 
     cartItemRepository.save(cartItem);
+
   }
 
   @Test
@@ -108,6 +109,7 @@ public class CartRepositoryTests {
     for (CartItemListDTO dto : cartItemList) {
       log.info(dto);
     }
+
   }
 
   @Test
@@ -118,7 +120,7 @@ public class CartRepositoryTests {
     // 장바구니 번호
     Long cno = cartItemRepository.getCartFromItem(cino);
 
-    // 삭제는 임의로 주석처리
+    // 삭제
     // cartItemRepository.deleteById(cino);
 
     // 목록
@@ -128,4 +130,5 @@ public class CartRepositoryTests {
       log.info(dto);
     }
   }
+
 }

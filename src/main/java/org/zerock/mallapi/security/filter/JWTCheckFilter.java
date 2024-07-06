@@ -25,8 +25,8 @@ public class JWTCheckFilter extends OncePerRequestFilter {
   @Override
   protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
 
-    // Preflight요청은 체크하지 않음 
-    if(request.getMethod().equals("OPTIONS")){
+    // Preflight요청은 체크하지 않음
+    if (request.getMethod().equals("OPTIONS")) {
       return true;
     }
 
@@ -34,35 +34,35 @@ public class JWTCheckFilter extends OncePerRequestFilter {
 
     log.info("check uri.............." + path);
 
-    //api/member/ 경로의 호출은 체크하지 않음 
-    if(path.startsWith("/api/member/")) {
+    // api/member/ 경로의 호출은 체크하지 않음
+    if (path.startsWith("/api/member/")) {
       return true;
     }
 
-    //이미지 조회 경로는 체크하지 않는다면 
-    if(path.startsWith("/api/products/view/")) {
+    // 이미지 조회 경로는 체크하지 않는다면
+    if (path.startsWith("/api/products/view/")) {
       return true;
     }
 
     return false;
   }
 
-
   @Override
-  protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+  protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+      throws ServletException, IOException {
 
     log.info("------------------------JWTCheckFilter.......................");
 
     String authHeaderStr = request.getHeader("Authorization");
 
     try {
-      //Bearer accestoken...
+      // Bearer accestoken...
       String accessToken = authHeaderStr.substring(7);
       Map<String, Object> claims = JWTUtil.validateToken(accessToken);
 
       log.info("JWT claims: " + claims);
 
-      //filterChain.doFilter(request, response); //이하 추가 
+      // filterChain.doFilter(request, response); //이하 추가
 
       String email = (String) claims.get("email");
       String pw = (String) claims.get("pw");
@@ -76,14 +76,14 @@ public class JWTCheckFilter extends OncePerRequestFilter {
       log.info(memberDTO);
       log.info(memberDTO.getAuthorities());
 
-      UsernamePasswordAuthenticationToken authenticationToken
-      = new UsernamePasswordAuthenticationToken(memberDTO, pw, memberDTO.getAuthorities());
+      UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(memberDTO, pw,
+          memberDTO.getAuthorities());
 
       SecurityContextHolder.getContext().setAuthentication(authenticationToken);
 
       filterChain.doFilter(request, response);
 
-    }catch(Exception e){
+    } catch (Exception e) {
 
       log.error("JWT Check Error..............");
       log.error(e.getMessage());
@@ -98,6 +98,5 @@ public class JWTCheckFilter extends OncePerRequestFilter {
 
     }
   }
-
 
 }

@@ -1,11 +1,7 @@
 package org.zerock.mallapi.domain;
 
 import jakarta.persistence.Embeddable;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 @Embeddable
 @Getter
@@ -19,7 +15,8 @@ public class ProductImage {
 
   private int ord;
 
-  public void setOrd(int ord){
+  public void setOrd(int ord) {
     this.ord = ord;
   }
+
 }

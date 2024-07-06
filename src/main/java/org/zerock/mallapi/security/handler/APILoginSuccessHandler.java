@@ -17,9 +17,9 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
-public class APILoginSuccessHandler implements AuthenticationSuccessHandler{
+public class APILoginSuccessHandler implements AuthenticationSuccessHandler {
 
-@Override
+  @Override
   public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
       Authentication authentication) throws IOException, ServletException {
 
@@ -27,18 +27,18 @@ public class APILoginSuccessHandler implements AuthenticationSuccessHandler{
     log.info(authentication);
     log.info("-------------------------------------");
 
-    MemberDTO memberDTO = (MemberDTO)authentication.getPrincipal();
+    MemberDTO memberDTO = (MemberDTO) authentication.getPrincipal();
 
     Map<String, Object> claims = memberDTO.getClaims();
 
     String accessToken = JWTUtil.generateToken(claims, 10);
-    String refreshToken = JWTUtil.generateToken(claims,60*24);
+    String refreshToken = JWTUtil.generateToken(claims, 60 * 24);
 
     claims.put("accessToken", accessToken);
     claims.put("refreshToken", refreshToken);
 
     Gson gson = new Gson();
-    
+
     String jsonStr = gson.toJson(claims);
 
     response.setContentType("application/json; charset=UTF-8");
@@ -48,5 +48,4 @@ public class APILoginSuccessHandler implements AuthenticationSuccessHandler{
 
   }
 
-  
 }

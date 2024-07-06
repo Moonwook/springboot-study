@@ -1,5 +1,18 @@
 package org.zerock.mallapi.util;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
+import net.coobird.thumbnailator.Thumbnails;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
@@ -9,16 +22,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.annotation.PostConstruct;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
-import net.coobird.thumbnailator.Thumbnails;
-
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.*;
 
 @Component
 @Log4j2
@@ -32,21 +35,20 @@ public class CustomFileUtil {
   public void init() {
     File tempFolder = new File(uploadPath);
 
-    if(tempFolder.exists() == false) {
-    tempFolder.mkdir();
+    if (tempFolder.exists() == false) {
+      tempFolder.mkdir();
     }
 
     uploadPath = tempFolder.getAbsolutePath();
+
     log.info("-------------------------------------");
     log.info(uploadPath);
   }
 
+  public List<String> saveFiles(List<MultipartFile> files) throws RuntimeException {
 
-  public List<String> saveFiles(List<MultipartFile> files) throws RuntimeException{
-
-    log.info("CustomFileUtil-savefiles()- files: ", files);
-    if(files == null || files.size() == 0){
-      return null; 
+    if (files == null || files.size() == 0) {
+      return null;
     }
 
     List<String> uploadNames = new ArrayList<>();
@@ -54,67 +56,58 @@ public class CustomFileUtil {
     for (MultipartFile multipartFile : files) {
 
       String savedName = UUID.randomUUID().toString() + "_" + multipartFile.getOriginalFilename();
+
       Path savePath = Paths.get(uploadPath, savedName);
 
       try {
         Files.copy(multipartFile.getInputStream(), savePath);
-        
-        String contentType = multipartFile.getContentType();
-        
-        // 이미지 여부 확인
-        if(contentType != null && contentType.startsWith("image")){      
-          Path thumbnailPath = Paths.get(uploadPath, "s_" + savedName);
-          
-          Thumbnails.of(savePath.toFile())
-          .size(200,200)
-          .toFile(thumbnailPath.toFile());
-        };
-        
-        uploadNames.add(savedName);
 
+        String contentType = multipartFile.getContentType();
+
+        if (contentType != null && contentType.startsWith("image")) { // 이미지여부 확인
+
+          Path thumbnailPath = Paths.get(uploadPath, "s_" + savedName);
+
+          Thumbnails.of(savePath.toFile()).size(400, 400).toFile(thumbnailPath.toFile());
+        }
+
+        uploadNames.add(savedName);
       } catch (IOException e) {
         throw new RuntimeException(e.getMessage());
       }
-    }//end for
-
+    } // end for
     return uploadNames;
   }
 
-
-  /**
-   * @param fileName
-   * @return
-   */
-  public ResponseEntity<Resource> getFile(String fileName){
+  public ResponseEntity<Resource> getFile(String fileName) {
 
     Resource resource = new FileSystemResource(uploadPath + File.separator + fileName);
 
-    if(!resource.isReadable()){
-      resource = new FileSystemResource(uploadPath + File.separator + "deafault.jpeg");
+    if (!resource.exists()) {
+
+      resource = new FileSystemResource(uploadPath + File.separator + "default.jpeg");
+
     }
 
     HttpHeaders headers = new HttpHeaders();
 
-    try{   
+    try {
       headers.add("Content-Type", Files.probeContentType(resource.getFile().toPath()));
-      
     } catch (Exception e) {
       return ResponseEntity.internalServerError().build();
     }
-
     return ResponseEntity.ok().headers(headers).body(resource);
   }
 
+  public void deleteFiles(List<String> fileNames) {
 
-  public void deleteFiles(List<String> fileNames){
-
-    if(fileNames == null || fileNames.size() == 0){
+    if (fileNames == null || fileNames.size() == 0) {
       return;
     }
 
     fileNames.forEach(fileName -> {
 
-      //썸네일이 있는지 확인하고 삭제
+      // 썸네일이 있는지 확인하고 삭제
       String thumbnailFileName = "s_" + fileName;
       Path thumbnailPath = Paths.get(uploadPath, thumbnailFileName);
       Path filePath = Paths.get(uploadPath, fileName);
@@ -122,11 +115,10 @@ public class CustomFileUtil {
       try {
         Files.deleteIfExists(filePath);
         Files.deleteIfExists(thumbnailPath);
-      } catch (Exception e) {
+      } catch (IOException e) {
         throw new RuntimeException(e.getMessage());
       }
     });
   }
 
 }
-    

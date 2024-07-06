@@ -1,10 +1,9 @@
 package org.zerock.mallapi.service;
 
+import org.springframework.transaction.annotation.Transactional;
 import org.zerock.mallapi.dto.PageRequestDTO;
 import org.zerock.mallapi.dto.PageResponseDTO;
 import org.zerock.mallapi.dto.ProductDTO;
-
-import jakarta.transaction.Transactional;
 
 @Transactional
 public interface ProductService {
@@ -18,4 +17,5 @@ public interface ProductService {
   void modify(ProductDTO productDTO);
 
   void remove(Long pno);
+
 }

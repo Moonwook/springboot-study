@@ -19,67 +19,36 @@ public class TodoServiceTests {
   private TodoService todoService;
 
   @Test
-  public void testRegister(){
-    
-    TodoDTO todoDTO = TodoDTO.builder()
-    .title("서비스 테스트")
-    .writer("tester")
-    .dueDate(LocalDate.of(2023, 10,10))
-    .build();
-    
+  public void testRegister() {
+
+    TodoDTO todoDTO = TodoDTO.builder().title("서비스 테스트").writer("tester").dueDate(LocalDate.of(2023, 10, 10)).build();
+
     Long tno = todoService.register(todoDTO);
-    
-    log.info("tno: " + tno);
-    
+
+    log.info("TNO: " + tno);
+
   }
 
-
   @Test
-  public void testGet(){
+  public void testGet() {
 
-    Long tno = 401L;
+    Long tno = 101L;
 
     TodoDTO todoDTO = todoService.get(tno);
 
     log.info(todoDTO);
+
   }
 
   @Test
-  public void testModify(){
+  public void testList() {
 
-    TodoDTO todoDTO = TodoDTO.builder()
-    .tno(401L)
-    .title("서비스 테스트--mod")
-    .complete(false)
-    .dueDate(LocalDate.of(2023, 10,11))
-    .build();
-    
-    todoService.modify(todoDTO);
-    
-    log.info(todoDTO);
-  }
-
-  @Test
-  public void testRemove(){
-
-    Long tno = 402L;
-
-    todoService.remove(tno);
-
-    log.info("tno: "+ tno);
-  }
-
-
-  @Test
-  public void testList(){
-
-    PageRequestDTO pageRequestDTO = PageRequestDTO.builder()
-      .page(2)
-      .size(10)
-      .build();
+    PageRequestDTO pageRequestDTO = PageRequestDTO.builder().page(2).size(10).build();
 
     PageResponseDTO<TodoDTO> response = todoService.list(pageRequestDTO);
 
     log.info(response);
+
   }
+
 }

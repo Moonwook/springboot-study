@@ -27,7 +27,8 @@ public class CartItem {
 
   private int qty;
 
-  public void changQty(int qty) {
+  public void changeQty(int qty) {
     this.qty = qty;
   }
+
 }

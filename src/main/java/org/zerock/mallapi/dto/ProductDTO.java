@@ -2,9 +2,7 @@ package org.zerock.mallapi.dto;
 
 import lombok.*;
 import java.util.*;
-
 import org.springframework.web.multipart.MultipartFile;
-
 
 @Data
 @Builder
@@ -23,8 +21,9 @@ public class ProductDTO {
   private boolean delFlag;
 
   @Builder.Default
-  private List<MultipartFile> files = new ArrayList();
+  private List<MultipartFile> files = new ArrayList<>();
 
   @Builder.Default
-  private List<String> uploadFileNames = new ArrayList();
+  private List<String> uploadFileNames = new ArrayList<>();
+
 }

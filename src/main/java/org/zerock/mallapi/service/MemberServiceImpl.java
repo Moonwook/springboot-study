@@ -31,9 +31,9 @@ public class MemberServiceImpl implements MemberService {
   private final PasswordEncoder passwordEncoder;
 
   @Override
-  public MemberDTO getKakaoMember(String accessTocken) {
+  public MemberDTO getKakaoMember(String accessToken) {
 
-    String email = getEmailFromKakaoAccessToken(accessTocken);
+    String email = getEmailFromKakaoAccessToken(accessToken);
 
     log.info("email: " + email);
 
@@ -41,11 +41,14 @@ public class MemberServiceImpl implements MemberService {
 
     // 기존의 회원
     if (result.isPresent()) {
+
       MemberDTO memberDTO = entityToDTO(result.get());
 
       return memberDTO;
+
     }
 
+    // 회원이 아니었다면
     // 닉네임은 '소셜회원'으로
     // 패스워드는 임의로 생성
     Member socialMember = makeSocialMember(email);
@@ -54,6 +57,7 @@ public class MemberServiceImpl implements MemberService {
     MemberDTO memberDTO = entityToDTO(socialMember);
 
     return memberDTO;
+
   }
 
   private String getEmailFromKakaoAccessToken(String accessToken) {
@@ -87,6 +91,7 @@ public class MemberServiceImpl implements MemberService {
     log.info("kakaoAccount: " + kakaoAccount);
 
     return kakaoAccount.get("email");
+
   }
 
   private Member makeSocialMember(String email) {
@@ -103,6 +108,7 @@ public class MemberServiceImpl implements MemberService {
     member.addRole(MemberRole.USER);
 
     return member;
+
   }
 
   private String makeTempPassword() {
@@ -121,10 +127,13 @@ public class MemberServiceImpl implements MemberService {
     Optional<Member> result = memberRepository.findById(memberModifyDTO.getEmail());
 
     Member member = result.orElseThrow();
+
     member.changePw(passwordEncoder.encode(memberModifyDTO.getPw()));
     member.changeSocial(false);
     member.changeNickname(memberModifyDTO.getNickname());
 
     memberRepository.save(member);
+
   }
+
 }

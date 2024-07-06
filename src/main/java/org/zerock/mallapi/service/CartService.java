@@ -11,7 +11,7 @@ import jakarta.transaction.Transactional;
 public interface CartService {
 
   // 장바구니 아이템 추가 혹은 변경
-  public List<CartItemListDTO> addOrModify(CartItemDTO cardItemDTO);
+  public List<CartItemListDTO> addOrModify(CartItemDTO cartItemDTO);
 
   // 모든 장바구니 아이템 목록
   public List<CartItemListDTO> getCartItems(String email);

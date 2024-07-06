@@ -1,11 +1,12 @@
 package org.zerock.mallapi.domain;
 
 import java.time.LocalDate;
+
 import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Table(name="tbl_todo")
+@Table(name = "tbl_todo")
 @Getter
 @ToString
 @Builder
@@ -25,15 +26,16 @@ public class Todo {
 
   private LocalDate dueDate;
 
-  public void changeTitle(String title){
+  public void changeTitle(String title) {
     this.title = title;
   }
 
-  public void changeComplete(boolean complete){
+  public void changeComplete(boolean complete) {
     this.complete = complete;
   }
-  
-  public void changeDueDate(LocalDate dueDate){
+
+  public void changeDueDate(LocalDate dueDate) {
     this.dueDate = dueDate;
   }
+
 }

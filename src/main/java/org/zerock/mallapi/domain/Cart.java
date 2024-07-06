@@ -9,7 +9,7 @@ import lombok.*;
 @NoArgsConstructor
 @Getter
 @ToString(exclude = "owner")
-@Table(name = "tbl_cart", indexes = { @Index(name = "idx_card_email", columnList = "member_owner") })
+@Table(name = "tbl_cart", indexes = { @Index(name = "idx_cart_email", columnList = "member_owner") })
 public class Cart {
 
   @Id

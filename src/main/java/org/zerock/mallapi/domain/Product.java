@@ -1,15 +1,10 @@
 package org.zerock.mallapi.domain;
 
+import jakarta.persistence.*;
+import lombok.*;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import jakarta.persistence.ElementCollection;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import lombok.*;
 
 @Entity
 @Table(name = "tbl_product")
@@ -32,36 +27,40 @@ public class Product {
 
   private boolean delFlag;
 
+  public void changeDel(boolean delFlag) {
+    this.delFlag = delFlag;
+  }
+
   @ElementCollection
   @Builder.Default
-  private List<ProductImage> imageList = new ArrayList();
+  private List<ProductImage> imageList = new ArrayList<>();
 
-  public void changePrice(int price){
+  public void changePrice(int price) {
     this.price = price;
   }
 
-  public void changeDesc(String desc){
+  public void changeDesc(String desc) {
     this.pdesc = desc;
   }
-  public void changeName(String name){
+
+  public void changeName(String name) {
     this.pname = name;
   }
 
-  public void addImage(ProductImage image){
+  public void addImage(ProductImage image) {
+
     image.setOrd(this.imageList.size());
     imageList.add(image);
   }
 
-  public void addImageString(String fileName){
-    ProductImage productImage = ProductImage.builder()
-      .fileName(fileName)
-      .build();
+  public void addImageString(String fileName) {
 
-      addImage(productImage);
+    ProductImage productImage = ProductImage.builder().fileName(fileName).build();
+    addImage(productImage);
+
   }
 
-  public void clearList(){
+  public void clearList() {
     this.imageList.clear();
   }
-
 }

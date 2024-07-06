@@ -24,7 +24,7 @@ public class SocialController {
   @GetMapping("/api/member/kakao")
   public Map<String, Object> getMemberFromKakao(String accessToken) {
 
-    log.info("access Tocken ");
+    log.info("access Token ");
     log.info(accessToken);
 
     MemberDTO memberDTO = memberService.getKakaoMember(accessToken);
@@ -35,7 +35,7 @@ public class SocialController {
     String jwtRefreshToken = JWTUtil.generateToken(claims, 60 * 24);
 
     claims.put("accessToken", jwtAccessToken);
-    claims.put("refreshTocken", jwtRefreshToken);
+    claims.put("refreshToken", jwtRefreshToken);
 
     return claims;
   }
@@ -43,10 +43,12 @@ public class SocialController {
   @PutMapping("/api/member/modify")
   public Map<String, String> modify(@RequestBody MemberModifyDTO memberModifyDTO) {
 
-    log.info("" + memberModifyDTO);
+    log.info("member modify: " + memberModifyDTO);
 
     memberService.modifyMember(memberModifyDTO);
 
     return Map.of("result", "modified");
+
   }
+
 }

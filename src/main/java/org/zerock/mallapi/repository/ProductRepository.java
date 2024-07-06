@@ -14,7 +14,7 @@ import org.zerock.mallapi.domain.Product;
 public interface ProductRepository extends JpaRepository<Product, Long> {
 
   @EntityGraph(attributePaths = "imageList")
-  @Query("Select p from Product p where p.pno = :pno")
+  @Query("select p from Product p where p.pno = :pno")
   Optional<Product> selectOne(@Param("pno") Long pno);
 
   @Modifying
